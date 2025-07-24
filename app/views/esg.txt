@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $page_title ?></title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js"></link>
+    <link href="public/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="navbar bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="navbar-brand">
+                    <i class="fas fa-car-side text-2xl"></i>
+                    Carpool India
+                </a>
+                
+                <div class="navbar-nav  md:flex">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/about" class="nav-link">About</a>
+                    <a href="/esg" class="nav-link text-green-600 font-semibold">ESG</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <?php if (Security::isLoggedIn()): ?>
+                        <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                        <a href="/logout" class="btn btn-secondary">Logout</a>
+                    <?php else: ?>
+                        <a href="/login" class="nav-link">Login</a>
+                        <a href="/signup" class="btn btn-primary">Sign Up</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-green-600 to-blue-600 py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold text-white mb-6" data-animate="fadeInUp">
+                Our ESG Impact
+            </h1>
+            <p class="text-xl text-white opacity-90 max-w-3xl mx-auto" data-animate="fadeInUp">
+                Environmental, Social, and Governance commitments driving sustainable transportation in India
+            </p>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6" data-animate="fadeInUp">Real Impact Numbers</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-animate="fadeInUp">
+                    Measurable progress towards our environmental and social goals
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center bg-green-50 p-8 rounded-2xl" data-animate="fadeInUp">
+                    <i class="fas fa-leaf text-4xl text-green-600 mb-4"></i>
+                    <div class="text-4xl font-bold text-green-600 mb-2 counter" data-target="<?= $stats['co2_saved'] ?>">0</div>
+                    <div class="text-gray-700 font-medium">kg CO₂ Saved</div>
+                    <p class="text-sm text-gray-600 mt-2">Equivalent to planting <?= $environmental_impact['trees_equivalent'] ?> trees</p>
+                </div>
+
+                <div class="text-center bg-blue-50 p-8 rounded-2xl" data-animate="fadeInUp">
+                    <i class="fas fa-gas-pump text-4xl text-blue-600 mb-4"></i>
+                    <div class="text-4xl font-bold text-blue-600 mb-2 counter" data-target="<?= $stats['fuel_saved'] ?>">0</div>
+                    <div class="text-gray-700 font-medium">Liters Fuel Saved</div>
+                    <p class="text-sm text-gray-600 mt-2">Reducing dependency on fossil fuels</p>
+                </div>
+
+                <div class="text-center bg-purple-50 p-8 rounded-2xl" data-animate="fadeInUp">
+                    <i class="fas fa-users text-4xl text-purple-600 mb-4"></i>
+                    <div class="text-4xl font-bold text-purple-600 mb-2 counter" data-target="<?= $stats['total_rides'] ?>">0</div>
+                    <div class="text-gray-700 font-medium">Rides Shared</div>
+                    <p class="text-sm text-gray-600 mt-2">Building stronger communities</p>
+                </div>
+
+                <div class="text-center bg-yellow-50 p-8 rounded-2xl" data-animate="fadeInUp">
+                    <i class="fas fa-rupee-sign text-4xl text-yellow-600 mb-4"></i>
+                    <div class="text-4xl font-bold text-yellow-600 mb-2 counter" data-target="<?= $stats['money_saved'] ?>">0</div>
+                    <div class="text-gray-700 font-medium">Money Saved (₹)</div>
+                    <p class="text-sm text-gray-600 mt-2">Reducing commute costs for users</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Environmental Impact -->
+    <section class="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div data-animate="fadeInLeft">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">Environmental Impact</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-leaf text-green-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">Carbon Emissions Reduction</h4>
+                                <p class="text-gray-600">Every shared ride reduces carbon footprint by an average of 5.2 kg CO₂, contributing to cleaner air quality in urban areas.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-car text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">Traffic Decongestion</h4>
+                                <p class="text-gray-600">Reducing the number of vehicles on roads, leading to smoother traffic flow and reduced commute times for everyone.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-recycle text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">Resource Optimization</h4>
+                                <p class="text-gray-600">Maximizing vehicle utilization to reduce the overall environmental impact of transportation infrastructure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg" data-animate="fadeInRight">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Environmental Progress</h3>
+                    <canvas id="environmentalChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Impact -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6" data-animate="fadeInUp">Social Impact</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-animate="fadeInUp">
+                    Building stronger communities through shared mobility
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center" data-animate="fadeInUp">
+                    <div class="w-20 h-20 bg-gradient-to-br from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-handshake text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Community Building</h3>
+                    <p class="text-gray-600">Connecting professionals from different companies and backgrounds, fostering new relationships and professional networks.</p>
+                </div>
+
+                <div class="text-center" data-animate="fadeInUp">
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Safe Transportation</h3>
+                    <p class="text-gray-600">Providing verified and secure carpooling options, especially beneficial for women commuters and late-night travelers.</p>
+                </div>
+
+                <div class="text-center" data-animate="fadeInUp">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-wallet text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Economic Benefits</h3>
+                    <p class="text-gray-600">Helping users save up to 70% on transportation costs, making quality commuting accessible to more people.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Governance -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6" data-animate="fadeInUp">Governance & Ethics</h2>
+                    <p class="text-lg text-gray-600" data-animate="fadeInUp">
+                        Maintaining the highest standards of transparency, security, and ethical practices
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm" data-animate="fadeInLeft">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Data Security & Privacy</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                                <span class="text-gray-700">End-to-end encryption for all communications</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                                <span class="text-gray-700">GDPR and CCPA compliance</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                                <span class="text-gray-700">Regular security audits and updates</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                                <span class="text-gray-700">OTP-based verification system</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-sm" data-animate="fadeInRight">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Platform Integrity</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                                <span class="text-gray-700">Verified corporate user profiles</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                                <span class="text-gray-700">Transparent pricing with no hidden fees</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                                <span class="text-gray-700">Fair dispute resolution process</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                                <span class="text-gray-700">24/7 customer support</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sustainability Goals -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6" data-animate="fadeInUp">2030 Sustainability Goals</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-animate="fadeInUp">
+                    Our commitment to measurable environmental and social impact
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <?php foreach ($sustainability_goals as $index => $goal): ?>
+                <div class="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-sm border" data-animate="fadeInUp" style="animation-delay: <?= $index * 0.2 ?>s">
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="<?= $goal['icon'] ?> text-3xl text-blue-600"></i>
+                        <span class="text-2xl font-bold text-gray-800"><?= $goal['progress'] ?>%</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><?= htmlspecialchars($goal['title']) ?></h3>
+                    <p class="text-gray-600 mb-6"><?= htmlspecialchars($goal['description']) ?></p>
+                    
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-blue-600 to-green-600 h-2 rounded-full transition-all duration-1000" 
+                             style="width: <?= $goal['progress'] ?>%"></div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 bg-gradient-to-r from-green-600 to-blue-600">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-white mb-6" data-animate="fadeInUp">
+                Join the Sustainability Movement
+            </h2>
+            <p class="text-xl text-white opacity-90 mb-8 max-w-2xl mx-auto" data-animate="fadeInUp">
+                Every ride you share contributes to a cleaner, more connected future
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center" data-animate="fadeInUp">
+                <a href="/signup" class="btn btn-primary bg-white text-green-600 hover:bg-gray-100">
+                    <i class="fas fa-leaf mr-2"></i> Start Making Impact
+                </a>
+                <a href="/about" class="btn btn-secondary">
+                    <i class="fas fa-info-circle mr-2"></i> Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-4">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-car-side text-blue-400 text-2xl mr-3"></i>
+                        <h3 class="text-white text-xl font-bold">Carpool India</h3>
+                    </div>
+                    <p class="text-gray-300">Making transportation sustainable, one ride at a time.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>ESG Reports</h4>
+                    <a href="#">Annual Report 2024</a>
+                    <a href="#">Impact Metrics</a>
+                    <a href="#">Sustainability Goals</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Get Involved</h4>
+                    <a href="/signup">Join Platform</a>
+                    <a href="/contact">Partner With Us</a>
+                    <a href="#">Corporate Program</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-green-400">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-green-400">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-green-400">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Carpool India by Elite Corporate Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="public/js/app.js"></script>
+    <script>
+    // Environmental Impact Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('environmentalChart').getContext('2d');
+        
+        const monthlyData = <?= json_encode($monthly_stats) ?>;
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'CO₂ Saved (kg)',
+                    data: labels.map((_, index) => {
+                        const monthData = monthlyData.find(m => m.month === index + 1);
+                        return monthData ? monthData.total_seats_shared * 5.2 : 0;
+                    }),
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Rides Shared',
+                    data: labels.map((_, index) => {
+                        const monthData = monthlyData.find(m => m.month === index + 1);
+                        return monthData ? monthData.rides_count : 0;
+                    }),
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Environmental Impact'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

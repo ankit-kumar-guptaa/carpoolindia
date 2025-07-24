@@ -1,0 +1,3 @@
+<?php 
+// Rides table migration 
+?> 

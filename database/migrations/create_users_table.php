@@ -1,0 +1,3 @@
+<?php 
+// Users table migration 
+?> 
