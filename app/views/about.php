@@ -523,6 +523,9 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .hero-section{
+                padding-top: 90px;
+            }
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -554,7 +557,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-              <img src="../public/images/logo1.png" width="190"  alt="">
+              <img src="../public/images/logo1.png" width="120"  alt="">
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -605,7 +608,7 @@
                     <div class="hero-content text-white" data-aos="fade-up">
                         <h1 class="hero-title">
                             About<br>
-                            <span style="background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Carpool India</span>
+                            <span style="background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Carpool India</span>
                         </h1>
                         <p class="hero-subtitle mb-4">
                             Pioneering India's transportation revolution through intelligent carpooling solutions that connect corporate professionals, reduce environmental impact, and create meaningful communities across the nation.
@@ -1166,7 +1169,7 @@
                         <i class="fas fa-car-side me-2"></i>Carpool India
                         <span class="elite-badge">by Elite Corporate Solutions</span>
                     </h5>
-                    <p class="text-muted">India's most trusted carpool network connecting verified professionals for smarter, greener commuting.</p>
+                    <p class="">India's most trusted carpool network connecting verified professionals for smarter, greener commuting.</p>
                     <div class="d-flex gap-3">
                         <a href="#" class="text-muted fs-5"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-muted fs-5"><i class="fab fa-twitter"></i></a>

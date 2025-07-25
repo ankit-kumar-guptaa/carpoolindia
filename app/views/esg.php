@@ -523,6 +523,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+          
+            .hero-section{
+                padding-top: 90px;
+            }
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -563,7 +567,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                 <img src="../public/images/logo1.png" width="190"  alt="">
+                 <img src="../public/images/logo1.png" width="120"  alt="">
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -686,94 +690,7 @@
     </section>
 
     <!-- Enhanced Impact Stats -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="display-4 fw-bold text-dark">Measurable ESG Impact</h2>
-                <p class="lead text-muted mb-5">Transparent metrics showcasing our commitment to sustainable transformation</p>
-            </div>
-            
-            <div class="row g-4 mb-5">
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stats-card">
-                        <div class="stats-icon" style="background: var(--success-gradient);">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <div class="stats-number">125,000</div>
-                        <h5 class="fw-bold text-dark mb-2">kg CO₂ Prevented</h5>
-                        <p class="text-success mb-3">Equivalent to planting 5,000 trees</p>
-                        <small class="text-muted">Each ride saves average 5.2kg CO₂ emissions</small>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stats-card">
-                        <div class="stats-icon" style="background: var(--info-gradient);">
-                            <i class="fas fa-gas-pump"></i>
-                        </div>
-                        <div class="stats-number">85,000</div>
-                        <h5 class="fw-bold text-dark mb-2">Liters Fuel Saved</h5>
-                        <p class="text-info mb-3">Reducing fossil fuel dependency</p>
-                        <small class="text-muted">Contributing to energy security</small>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stats-card">
-                        <div class="stats-icon" style="background: var(--purple-gradient);">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stats-number">250,000</div>
-                        <h5 class="fw-bold text-dark mb-2">Lives Positively Impacted</h5>
-                        <p class="text-purple mb-3">Building stronger communities</p>
-                        <small class="text-muted">Through safe, affordable mobility</small>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="stats-card">
-                        <div class="stats-icon" style="background: var(--warning-gradient);">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="stats-number">15,000</div>
-                        <h5 class="fw-bold text-dark mb-2">Women Empowered</h5>
-                        <p class="text-warning mb-3">Through safe transportation</p>
-                        <small class="text-muted">Female-only carpool initiatives</small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Impact Metrics -->
-            <div class="row g-4">
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="impact-item">
-                        <i class="fas fa-industry fs-1 text-success mb-3"></i>
-                        <h5 class="fw-bold">Corporate Partners</h5>
-                        <div class="h3 text-success">500+</div>
-                        <p class="text-muted mb-0">Leading companies integrating sustainable commuting</p>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="600">
-                    <div class="impact-item">
-                        <i class="fas fa-city fs-1 text-info mb-3"></i>
-                        <h5 class="fw-bold">Cities Served</h5>
-                        <div class="h3 text-info">25+</div>
-                        <p class="text-muted mb-0">Expanding sustainable mobility nationwide</p>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="700">
-                    <div class="impact-item">
-                        <i class="fas fa-rupee-sign fs-1 text-warning mb-3"></i>
-                        <h5 class="fw-bold">Economic Value Created</h5>
-                        <div class="h3 text-warning">₹50Cr+</div>
-                        <p class="text-muted mb-0">Savings reinvested in local economy</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
     <!-- Environmental Stewardship Section */
     <section id="environmental" class="py-5 bg-white">
@@ -1535,7 +1452,7 @@
                         <i class="fas fa-car-side me-2"></i>Carpool India
                         <span class="elite-badge">by Elite Corporate Solutions</span>
                     </h5>
-                    <p class="text-muted">India's most trusted carpool network connecting verified professionals for smarter, greener commuting.</p>
+                    <p class="">India's most trusted carpool network connecting verified professionals for smarter, greener commuting.</p>
                     <div class="d-flex gap-3">
                         <a href="#" class="text-muted fs-5"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-muted fs-5"><i class="fab fa-twitter"></i></a>
