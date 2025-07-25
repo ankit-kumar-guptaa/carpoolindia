@@ -7,10 +7,16 @@
 
 
 
+// define('DB_HOST', 'localhost');
+// define('DB_NAME', 'carpoolindiaa');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
+
+
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'carpoolindiaa');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'recru2l1_carpoolindia');
+define('DB_USER', 'recru2l1_carpoolindia');
+define('DB_PASS', 'Carpool@1925@');
 
 // SMTP Configuration
 define('SMTP_HOST', 'smtp.office365.com');
