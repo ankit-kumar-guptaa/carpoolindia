@@ -119,7 +119,6 @@ class RideModel {
                 'booking_amount' => $bookingAmount,
                 'booking_status' => 'pending', // Start as pending
                 'request_message' => $message,
-                'payment_status' => 'pending',
                 'created_at' => date('Y-m-d H:i:s')
             ]);
             
@@ -634,7 +633,7 @@ class RideModel {
                 [$bookingId, $userId]
             );
             
-            if (!booking) {
+            if (!$booking) {
                 throw new Exception('Booking not found');
             }
             

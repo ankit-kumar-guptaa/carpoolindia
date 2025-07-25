@@ -20,6 +20,23 @@
             --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --purple-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
         }
+        
+        /* Autocomplete styles */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
 
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -290,26 +307,17 @@
             justify-content: center;
         }
 
-        .autocomplete-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e9ecef;
-            border-top: none;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
         .autocomplete-item {
             padding: 12px 15px;
             cursor: pointer;
             border-bottom: 1px solid #f8f9fa;
             transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .autocomplete-item.active {
+            background: #f0f7ff;
         }
 
         .autocomplete-item:hover {
@@ -318,6 +326,56 @@
 
         .autocomplete-item:last-child {
             border-bottom: none;
+        }
+        
+        .autocomplete-icon {
+            margin-right: 12px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+        
+        .autocomplete-text {
+            flex: 1;
+        }
+        
+        .autocomplete-main {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .autocomplete-main strong {
+            color: #667eea;
+        }
+        
+        .autocomplete-sub {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        
+        .loading-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: #6c757d;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .vehicle-info {
@@ -1038,59 +1096,15 @@
         }
 
         // Autocomplete functionality
-        document.querySelectorAll('[data-autocomplete="location"]').forEach(input => {
-            let timeout;
-            
-            input.addEventListener('input', function() {
-                const query = this.value.trim();
-                const resultsDiv = document.getElementById(this.dataset.results);
-                
-                clearTimeout(timeout);
-                
-                if (query.length < 3) {
-                    resultsDiv.classList.add('d-none');
-                    return;
-                }
-                
-                timeout = setTimeout(async () => {
-                    try {
-                        const response = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`);
-                        const results = await response.json();
-                        
-                        if (results.length > 0) {
-                            resultsDiv.innerHTML = results.map(result => 
-                                `<div class="autocomplete-item" onclick="selectLocation('${this.id}', '${result.display_name.replace(/'/g, "\\'")}', '${this.dataset.results}')">
-                                    ${result.display_name}
-                                </div>`
-                            ).join('');
-                            resultsDiv.classList.remove('d-none');
-                        } else {
-                            resultsDiv.classList.add('d-none');
-                        }
-                    } catch (error) {
-                        console.error('Autocomplete error:', error);
-                        resultsDiv.classList.add('d-none');
-                    }
-                }, 300);
-            });
-        });
+        let autocompleteCache = new Map();
+        let currentRequests = new Map();
+        let activeIndices = new Map();
+        let isInitialized = false;
 
-        function selectLocation(inputId, location, resultsId) {
-            document.getElementById(inputId).value = location;
-            document.getElementById(resultsId).classList.add('d-none');
-        }
-
-        // Close autocomplete when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.matches('[data-autocomplete="location"]')) {
-                document.querySelectorAll('.autocomplete-dropdown').forEach(dropdown => {
-                    dropdown.classList.add('d-none');
-                });
-            }
-        });
-
-        // Auto-load search results from home page
         document.addEventListener('DOMContentLoaded', function() {
+            initializeAutocomplete();
+            
+            // Auto-load search results from home page
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('search') === 'true') {
                 const searchParams = JSON.parse(sessionStorage.getItem('searchParams') || '{}');
@@ -1102,7 +1116,328 @@
                     
                     // Clear from session storage
                     sessionStorage.removeItem('searchParams');
+                    
+                    // Trigger search form submission
+                    document.getElementById('searchForm').dispatchEvent(new Event('submit'));
                 }
+            }
+            
+            isInitialized = true;
+        });
+
+        // Enhanced Persistent Autocomplete System
+        function initializeAutocomplete() {
+            const inputConfigs = [
+                { 
+                    input: document.getElementById('searchSource'), 
+                    results: document.getElementById('searchSourceResults'),
+                    key: 'source'
+                },
+                { 
+                    input: document.getElementById('searchDestination'), 
+                    results: document.getElementById('searchDestinationResults'),
+                    key: 'destination'
+                },
+                { 
+                    input: document.getElementById('createSource'), 
+                    results: document.getElementById('createSourceResults'),
+                    key: 'createSource'
+                },
+                { 
+                    input: document.getElementById('createDestination'), 
+                    results: document.getElementById('createDestinationResults'),
+                    key: 'createDestination'
+                }
+            ];
+
+            inputConfigs.forEach(config => {
+                if (!config.input || !config.results) return;
+
+                // Initialize variables for this input
+                activeIndices.set(config.key, -1);
+                
+                // Input event - triggers on every keystroke
+                config.input.addEventListener('input', function() {
+                    handleInputChange(this, config.results, config.key);
+                });
+
+                // Focus event - triggers when user clicks/focuses on input
+                config.input.addEventListener('focus', function() {
+                    const query = this.value.trim();
+                    if (query.length >= 2) {
+                        // Show cached results immediately if available
+                        if (autocompleteCache.has(query)) {
+                            displayCachedResults(autocompleteCache.get(query), config.results, this, query, config.key);
+                        } else {
+                            searchLocations(query, config.results, this, config.key);
+                        }
+                    }
+                });
+
+                // Blur event - hide results after delay to allow for clicks
+                config.input.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        hideResults(config.results, config.key);
+                    }, 200);
+                });
+
+                // Keyboard navigation
+                config.input.addEventListener('keydown', function(e) {
+                    handleKeyboardNavigation(e, config.results, this, config.key);
+                });
+            });
+
+            // Global click handler to close dropdowns
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-input-group')) {
+                    inputConfigs.forEach(config => {
+                        hideResults(config.results, config.key);
+                    });
+                }
+            });
+        }
+
+        function handleInputChange(input, resultsDiv, key) {
+            const query = input.value.trim();
+            activeIndices.set(key, -1);
+            
+            if (query.length < 2) {
+                hideResults(resultsDiv, key);
+                return;
+            }
+            
+            // Check cache first
+            if (autocompleteCache.has(query)) {
+                displayCachedResults(autocompleteCache.get(query), resultsDiv, input, query, key);
+                return;
+            }
+            
+            // Debounce the search
+            clearTimeout(currentRequests.get(key));
+            const timeoutId = setTimeout(() => {
+                searchLocations(query, resultsDiv, input, key);
+            }, 300);
+            currentRequests.set(key, timeoutId);
+        }
+
+        function handleKeyboardNavigation(e, resultsDiv, input, key) {
+            const items = resultsDiv.querySelectorAll('.autocomplete-item:not(.loading-item)');
+            
+            if (items.length === 0) return;
+            
+            let currentIndex = activeIndices.get(key);
+            
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    currentIndex = Math.min(currentIndex + 1, items.length - 1);
+                    activeIndices.set(key, currentIndex);
+                    updateActiveItem(items, currentIndex);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    currentIndex = Math.max(currentIndex - 1, -1);
+                    activeIndices.set(key, currentIndex);
+                    updateActiveItem(items, currentIndex);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (currentIndex >= 0 && items[currentIndex]) {
+                        selectLocationFromElement(items[currentIndex], input, resultsDiv, key);
+                    }
+                    break;
+                case 'Escape':
+                    hideResults(resultsDiv, key);
+                    activeIndices.set(key, -1);
+                    break;
+            }
+        }
+
+        async function searchLocations(query, resultsDiv, inputElement, key) {
+            // Cancel previous request
+            const existingController = currentRequests.get(`${key}_controller`);
+            if (existingController) {
+                existingController.abort();
+            }
+
+            // Show loading
+            showLoading(resultsDiv, key);
+
+            try {
+                const controller = new AbortController();
+                currentRequests.set(`${key}_controller`, controller);
+
+                const response = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`, {
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                // Cache the results
+                autocompleteCache.set(query, data);
+                
+                if (data && data.length > 0) {
+                    displayResults(data, resultsDiv, inputElement, query, key);
+                } else {
+                    showNoResults(resultsDiv, query, key);
+                }
+
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Autocomplete error:', error);
+                    showError(resultsDiv, key);
+                }
+            } finally {
+                currentRequests.delete(`${key}_controller`);
+            }
+        }
+
+        function displayResults(locations, resultsDiv, inputElement, query, key) {
+            const html = locations.map((location, index) => {
+                const displayName = location.display_name;
+                const mainName = displayName.split(',')[0];
+                const address = displayName.split(',').slice(1, 3).join(',');
+                const icon = getLocationIcon(location.type || location.class);
+                
+                return `
+                    <div class="autocomplete-item" data-index="${index}" onclick="selectLocationFromClick('${location.display_name.replace(/'/g, "\\'")}',' ${inputElement.id}', '${resultsDiv.id}', '${key}')">
+                        <div class="autocomplete-icon">
+                            <i class="${icon}"></i>
+                        </div>
+                        <div class="autocomplete-text">
+                            <div class="autocomplete-main">${highlightMatch(mainName, query)}</div>
+                            <div class="autocomplete-sub">${address}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            resultsDiv.innerHTML = html;
+            showResults(resultsDiv, key);
+        }
+
+        function displayCachedResults(locations, resultsDiv, inputElement, query, key) {
+            displayResults(locations, resultsDiv, inputElement, query, key);
+        }
+
+        function showLoading(resultsDiv, key) {
+            resultsDiv.innerHTML = `
+                <div class="loading-item">
+                    <div class="spinner"></div>
+                    <span>Searching locations...</span>
+                </div>
+            `;
+            showResults(resultsDiv, key);
+        }
+
+        function showNoResults(resultsDiv, query, key) {
+            resultsDiv.innerHTML = `
+                <div class="autocomplete-item">
+                    <div class="autocomplete-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="autocomplete-text">
+                        <div class="autocomplete-main">No locations found for "${query}"</div>
+                        <div class="autocomplete-sub">Try searching for a city or landmark</div>
+                    </div>
+                </div>
+            `;
+            showResults(resultsDiv, key);
+        }
+
+        function showError(resultsDiv, key) {
+            resultsDiv.innerHTML = `
+                <div class="autocomplete-item">
+                    <div class="autocomplete-icon">
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                    </div>
+                    <div class="autocomplete-text">
+                        <div class="autocomplete-main">Unable to search locations</div>
+                        <div class="autocomplete-sub">Please check your internet connection</div>
+                    </div>
+                </div>
+            `;
+            showResults(resultsDiv, key);
+        }
+
+        function showResults(resultsDiv, key) {
+            resultsDiv.classList.remove('d-none');
+            resultsDiv.classList.add('show');
+            resultsDiv.style.display = 'block';
+        }
+
+        function hideResults(resultsDiv, key) {
+            resultsDiv.classList.add('d-none');
+            resultsDiv.classList.remove('show');
+            resultsDiv.style.display = 'none';
+            activeIndices.set(key, -1);
+        }
+
+        function getLocationIcon(type) {
+            switch(type?.toLowerCase()) {
+                case 'city':
+                case 'town':
+                case 'village':
+                    return 'fas fa-city';
+                case 'airport':
+                case 'aerodrome':
+                    return 'fas fa-plane';
+                case 'railway':
+                case 'station':
+                    return 'fas fa-train';
+                case 'bus_stop':
+                    return 'fas fa-bus';
+                case 'amenity':
+                    return 'fas fa-map-pin';
+                default:
+                    return 'fas fa-map-marker-alt';
+            }
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<strong>$1</strong>');
+        }
+
+        function updateActiveItem(items, activeIndex) {
+            items.forEach((item, index) => {
+                if (index === activeIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function selectLocationFromElement(item, input, results, key) {
+            const locationName = item.querySelector('.autocomplete-main').textContent;
+            input.value = locationName;
+            hideResults(results, key);
+        }
+
+        // Global function for onclick events
+        function selectLocationFromClick(locationName, inputId, resultsId, key) {
+            const input = document.getElementById(inputId);
+            const results = document.getElementById(resultsId);
+            
+            if (input && results) {
+                input.value = locationName;
+                hideResults(results, key);
+            }
+        }
+
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('[data-autocomplete="location"]')) {
+                document.querySelectorAll('.autocomplete-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('d-none');
+                });
             }
         });
     </script>

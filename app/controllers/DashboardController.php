@@ -269,7 +269,7 @@ class DashboardController {
                        COALESCE(COUNT(CASE WHEN b.booking_status = 'confirmed' THEN 1 END), 0) as confirmed_bookings,
                        COALESCE(COUNT(CASE WHEN b.booking_status = 'pending' THEN 1 END), 0) as pending_requests,
                        COALESCE(SUM(CASE WHEN b.booking_status = 'confirmed' THEN b.booking_amount ELSE 0 END), 0) as total_expected,
-                       COALESCE(SUM(CASE WHEN b.booking_status = 'confirmed' AND b.payment_mode IS NOT NULL THEN b.booking_amount ELSE 0 END), 0) as total_received
+                       COALESCE(SUM(CASE WHEN b.booking_status = 'confirmed' THEN b.booking_amount ELSE 0 END), 0) as total_received
                 FROM rides r 
                 LEFT JOIN bookings b ON r.id = b.ride_id 
                 WHERE r.user_id = ? 
@@ -289,7 +289,6 @@ class DashboardController {
                        COALESCE(b.seats_booked, 1) as seats_booked, 
                        COALESCE(b.booking_amount, 0) as booking_amount, 
                        COALESCE(b.booking_status, 'pending') as booking_status,
-                       b.payment_mode,
                        b.created_at as booking_date, 
                        u.name as driver_name, 
                        u.phone as driver_phone,
@@ -991,15 +990,15 @@ public function completeRide() {
         }
         
         // Check if all confirmed bookings have payment mode recorded
-        $unpaidBookings = $this->db->fetchOne(
-            "SELECT COUNT(*) as count FROM bookings 
-             WHERE ride_id = ? AND booking_status IN ('confirmed', 'started') AND payment_mode IS NULL",
-            [$rideId]
-        );
+        // $unpaidBookings = $this->db->fetchOne(
+        //     "SELECT COUNT(*) as count FROM bookings 
+        //      WHERE ride_id = ? AND booking_status IN ('confirmed', 'started') AND payment_mode IS NULL",
+        //     [$rideId]
+        // );
         
-        if ($unpaidBookings['count'] > 0) {
-            throw new Exception('Please record payment mode for all passengers before completing the ride');
-        }
+        // if ($unpaidBookings['count'] > 0) {
+        //     throw new Exception('Please record payment mode for all passengers before completing the ride');
+        // }
         
         // Complete the ride
         $success = $this->db->update('rides', [
