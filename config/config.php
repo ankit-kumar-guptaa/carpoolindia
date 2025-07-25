@@ -1,9 +1,13 @@
 <?php
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'carpoolindiaa');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', 'srv1086.hstgr.io');
+define('DB_NAME', 'u141142577_carpoolindia');
+define('DB_USER', 'u141142577_carpoolindia');
+define('DB_PASS', 'Pink@1234!');
+// define('DB_HOST', 'localhost');
+// define('DB_NAME', 'carpoolindiaa');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
 
 // SMTP Configuration
 define('SMTP_HOST', 'smtp.office365.com');
