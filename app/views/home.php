@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
@@ -639,8 +639,8 @@
         }
 
         .btn-outline-primary {
-            /* border: 2px solid white; */
-            /* color: white; */
+            border: 2px solid white;
+            color: white;
             padding: 0.75rem 2rem;
             border-radius: 50px;
             font-weight: 600;
@@ -740,7 +740,15 @@
                         <a href="/dashboard" class="btn btn-primary me-2">Dashboard</a>
                         <a href="/logout" class="btn btn-outline-primary">Logout</a>
                     <?php else: ?>
-                        <a href="/login" class="btn btn-outline-primary me-2">Login</a>
+                        <a href="/login" class="btn btn-outline-primary me-2" style="
+    border: 2px solid #616c94;
+    color: #21187f;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: transparent;
+">Login</a>
                         <a href="/signup" class="btn btn-primary">Sign Up</a>
                     <?php endif; ?>
                 </div>
@@ -779,7 +787,7 @@
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="hero-image text-center">
-                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="People carpooling together" class="img-fluid">
+                        <img src="../public/images/carpool.jpg" alt="People carpooling together" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -850,8 +858,9 @@
             <div class="row g-4">
                 <div class="col-lg-6" data-aos="fade-right">
                     <div class="d-flex align-items-start mb-4">
-                        <div class="feature-icon me-4" style="background: var(--warning-gradient);">
-                            <i class="fas fa-oil-can"></i>
+                        <div class="feature-icon me-4" style="background: var(--warning-gradient);height: 50px;">
+                           <i class="fas fa-gas-pump"></i>
+
                         </div>
                         <div class="text-white">
                             <h4 class="fw-bold mb-3">Fuel Import Crisis</h4>
@@ -862,7 +871,7 @@
                 
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="d-flex align-items-start mb-4">
-                        <div class="feature-icon me-4" style="background: var(--success-gradient);">
+                        <div class="feature-icon me-4" style="background: var(--success-gradient);height: 50px;">
                             <i class="fas fa-lungs"></i>
                         </div>
                         <div class="text-white">
@@ -874,7 +883,7 @@
                 
                 <div class="col-lg-6" data-aos="fade-right">
                     <div class="d-flex align-items-start">
-                        <div class="feature-icon me-4" style="background: var(--info-gradient);">
+                        <div class="feature-icon me-4" style="background: var(--info-gradient);height: 50px;">
                             <i class="fas fa-traffic-light"></i>
                         </div>
                         <div class="text-white">
@@ -886,7 +895,7 @@
                 
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="d-flex align-items-start">
-                        <div class="feature-icon me-4" style="background: var(--purple-gradient);">
+                        <div class="feature-icon me-4" style="background: var(--purple-gradient);height: 50px;  ">
                             <i class="fas fa-hand-holding-heart"></i>
                         </div>
                         <div class="text-white">
@@ -900,7 +909,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats-section">
+    <!-- <section class="stats-section">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
                 <h2 class="h1 fw-bold text-dark">Our Impact</h2>
@@ -949,7 +958,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Live Map Section -->
     <section class="map-section">
@@ -976,7 +985,7 @@
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="section-card text-center">
-                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Save Money">
+                        <img src="https://www.thebalancemoney.com/thmb/l0KQr3CBNz85XPg3YXxRF2UIaiw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cropped-image-of-hand-putting-coins-in-jars-with-plants-755740897-5ab88ee1875db9003759d390.jpg" alt="Save Money">
                         <div class="feature-icon" style="background: var(--success-gradient);">
                             <i class="fas fa-wallet"></i>
                         </div>
@@ -1009,7 +1018,7 @@
                 
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="section-card text-center">
-                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Safe and Verified">
+                        <img src="https://tse4.mm.bing.net/th/id/OIP.Ltb21-EFytdRN4AtDhvFJQHaFj?r=0&w=626&h=470&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Safe and Verified">
                         <div class="feature-icon" style="background: var(--primary-gradient);">
                             <i class="fas fa-shield-alt"></i>
                         </div>
@@ -1020,7 +1029,7 @@
                 
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
                     <div class="section-card text-center">
-                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Time Efficiency">
+                        <img src="https://th.bing.com/th/id/OIG2.RJB9L2PwETbFJSSDiMZX?r=0&w=1024&h=1024&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Time Efficiency">
                         <div class="feature-icon" style="background: var(--orange-gradient);">
                             <i class="fas fa-clock"></i>
                         </div>
@@ -1031,7 +1040,7 @@
                 
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
                     <div class="section-card text-center">
-                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Easy to Use">
+                        <img src="https://th.bing.com/th/id/OIG1.qYKG4Gf1Vu4DYDcrGbn2?r=0&w=1024&h=1024&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Easy to Use">
                         <div class="feature-icon" style="background: var(--purple-gradient);">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
